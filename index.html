@@ -21,6 +21,7 @@
     .card {
       border: 2px dashed #cbd5e1;
       transition: border-color .2s, box-shadow .2s, background-color .3s;
+      cursor: pointer;
     }
 
     .card:hover {
@@ -60,6 +61,45 @@
 
     .footer-note {
       font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Popup Modal Detail */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .popup-card {
+      background: #ffffff;
+      max-width: 480px;
+      width: 100%;
+      border-radius: 20px;
+      animation: popupAnim .25s ease-out;
+    }
+
+    @keyframes popupAnim {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    body.dark-mode .popup-card {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+    }
+
+    body.dark-mode .popup-card .btn-close {
+      filter: invert(1);
     }
 
     /* Kartu yang ditandai Favorit */
@@ -429,6 +469,20 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- ======================================================
+       POPUP MODAL DETAIL PRODUK (KLIK KARTU)
+       ====================================================== -->
+  <div id="popup-modal" class="popup-overlay d-none">
+    <div class="popup-card p-4 position-relative shadow-lg">
+      <button type="button" id="btn-close-popup" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close"></button>
+      <span id="popup-badge" class="badge bg-secondary mb-2">Detail Produk</span>
+      <img id="popup-img" src="" alt="Detail Produk" class="product-img mb-3 mt-1" style="height: 250px;">
+      <h3 id="popup-title" class="fw-bold fs-4 mb-2">Nama Produk</h3>
+      <p id="popup-desc" class="text-secondary small mb-3">Deskripsi produk...</p>
+      <div id="popup-price" class="product-price fs-4 text-primary">Rp 0</div>
+    </div>
   </div>
 
   <p class="footer-note text-center mt-5 text-secondary small">

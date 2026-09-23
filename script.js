@@ -5,9 +5,19 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // ============================================================
-    // BAGIAN 1: EVENT DELEGATION (HAPUS, LIKE, FAV)
+    // BAGIAN 1: EVENT DELEGATION (HAPUS, LIKE, FAV, KLIK KARTU)
     // ============================================================
+    // Tangkap wadah gedenya, biar gak perlu pasang listener satu-satu di tiap card
     const productContainer = document.getElementById('product-container');
+
+    // Bantuan variabel elemen pop-up modal (bisa kamu uncomment kalau mau pakai):
+    // const popupModal = document.getElementById('popup-modal');
+    // const btnClosePopup = document.getElementById('btn-close-popup');
+    // const popupImg = document.getElementById('popup-img');
+    // const popupTitle = document.getElementById('popup-title');
+    // const popupDesc = document.getElementById('popup-desc');
+    // const popupPrice = document.getElementById('popup-price');
+    // const popupBadge = document.getElementById('popup-badge');
 
     productContainer.addEventListener('click', function (event) {
         const target = event.target; // Ini elemen yang beneran lagi diklik user
@@ -54,6 +64,29 @@ document.addEventListener('DOMContentLoaded', function () {
         //      * Kalo gak aktif, balikin jadi '⭐ Fav'
 
         // GAS TULIS KODE FITUR 2B DI SINI:
+
+
+
+
+        // --------------------------------------------------------
+        // FITUR 2C: POP-UP DETAIL PRODUK (KLIK KARTU)
+        // --------------------------------------------------------
+        // Clue pengerjaan:
+        // 1. Cek apakah yang diklik itu area kartu (.card), pake .closest('.card')
+        // 2. Kalo iya (dan bukan tombol-tombol di atas):
+        //    - Ambil data dari dalem kartu:
+        //        * Gambar: card.querySelector('.product-img').src
+        //        * Judul: card.querySelector('.fw-semibold').textContent
+        //        * Deskripsi: card.querySelector('.small.text-secondary').textContent
+        //        * Harga: card.querySelector('.product-price').textContent
+        //        * Kategori: card.getAttribute('data-category')
+        //    - Masukin data tadi ke elemen pop-up (popupImg.src, popupTitle.textContent, dll.)
+        //    - Munculin pop-up modal dengan cara hapus class 'd-none' pake .classList.remove('d-none')
+
+        // Bantuan variabel kartu:
+        // const card = target.closest('.card');
+
+        // GAS TULIS KODE FITUR POP-UP DI SINI:
 
 
 
@@ -127,6 +160,24 @@ document.addEventListener('DOMContentLoaded', function () {
     //    - Langsung tembak warnanya ke document.body.style.backgroundColor
 
     // GAS TULIS KODE GANTI WARNA DI SINI:
+
+
+
+
+
+    // ============================================================
+    // BAGIAN 5: TUTUP POP-UP MODAL
+    // ============================================================
+    // Clue pengerjaan:
+    // 1. Pasang event listener 'click' di tombol silang btnClosePopup:
+    //    - Tambahin class 'd-none' ke popupModal biar pop-up-nya ketutup
+    // 2. Pasang event listener 'click' di popupModal:
+    //    - Kalo yang diklik beneran area latar belakang gelap (event.target === popupModal),
+    //      tutup pop-up dengan nambahin class 'd-none'
+    // 3. (Opsional) Pasang event 'keydown' di document:
+    //    - Kalo tombol keyboard 'Escape' ditekan, tutup pop-up modal
+
+    // GAS TULIS KODE TUTUP POP-UP DI SINI:
 
 
 
