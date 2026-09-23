@@ -15,11 +15,12 @@
     body {
       font-family: 'Inter', sans-serif;
       background: #f1f5f9;
+      transition: background-color .3s ease, color .3s ease;
     }
 
     .card {
       border: 2px dashed #cbd5e1;
-      transition: border-color .2s, box-shadow .2s;
+      transition: border-color .2s, box-shadow .2s, background-color .3s;
     }
 
     .card:hover {
@@ -60,48 +61,248 @@
     .footer-note {
       font-family: 'JetBrains Mono', monospace;
     }
+
+    /* Kartu yang ditandai Favorit */
+    .card.is-favorite {
+      border: 2px solid #eab308 !important;
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.25);
+    }
+
+    /* ==========================================
+       STYLE DARK MODE
+       ========================================== */
+    body.dark-mode {
+      background-color: #0f172a !important;
+      color: #f8fafc;
+    }
+
+    body.dark-mode .card {
+      background-color: #1e293b;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+
+    body.dark-mode h1 {
+      color: #f8fafc !important;
+    }
+
+    body.dark-mode .card .text-secondary {
+      color: #94a3b8 !important;
+    }
+
+    body.dark-mode .card .product-price {
+      color: #38bdf8 !important;
+    }
+
+    body.dark-mode .control-panel {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #f8fafc;
+    }
+
+    body.dark-mode .input-group-text,
+    body.dark-mode .form-control,
+    body.dark-mode .form-select {
+      background-color: #334155;
+      color: #f8fafc;
+      border-color: #475569;
+    }
+
+    body.dark-mode .form-control::placeholder {
+      color: #94a3b8;
+    }
+
+    body.dark-mode .footer-note {
+      color: #64748b !important;
+    }
   </style>
 </head>
 
 <body class="py-5 px-3">
 
-  <div class="text-center mb-5">
+  <div class="text-center mb-4">
     <h1 class="fw-bold fs-2 text-dark">Toko Tim Second Choice</h1>
   </div>
 
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4" style="max-width:960px; margin:0 auto;">
+  <!-- ======================================================
+       PANEL KONTROL (FITUR JAVASCRIPT)
+       ====================================================== -->
+  <div class="card control-panel p-3 mb-4 rounded-4 shadow-sm border" style="max-width:960px; margin:0 auto;">
+    <div class="row g-3 align-items-center">
+
+      <!-- Fitur 3: Search Box -->
+      <div class="col-12 col-md-4">
+        <div class="input-group">
+          <span class="input-group-text">🔍</span>
+          <input type="text" id="search-input" class="form-control" placeholder="Cari nama produk...">
+        </div>
+      </div>
+
+      <!-- Fitur 3: Filter Kategori -->
+      <div class="col-12 col-sm-6 col-md-3">
+        <select id="filter-select" class="form-select">
+          <option value="all">Semua Kategori</option>
+          <option value="gadget">Gadget & Elektronik</option>
+          <option value="lainnya">Lainnya</option>
+          <option value="fav">⭐ Hanya Favorit</option>
+        </select>
+      </div>
+
+      <!-- Fitur 4: Dark / Light Mode -->
+      <div class="col-6 col-sm-3 col-md-2">
+        <button type="button" id="btn-theme" class="btn btn-outline-dark w-100">🌙 Dark</button>
+      </div>
+
+      <!-- Fitur 5: Edit Background Color -->
+      <div class="col-6 col-sm-3 col-md-3 d-flex align-items-center gap-2">
+        <label for="bg-color-picker" class="small fw-semibold text-nowrap mb-0">Ubah Bg:</label>
+        <input type="color" id="bg-color-picker" class="form-control form-control-color w-100" value="#f1f5f9"
+          title="Pilih warna background">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================
+       CONTAINER DAFTAR PRODUK (CARD)
+       ====================================================== -->
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4" id="product-container"
+    style="max-width:960px; margin:0 auto;">
+
+    <!-- Pesan kosong jika pencarian tidak ditemukan -->
+    <div id="empty-state" class="col-12 text-center py-5 d-none w-100">
+      <p class="text-secondary fs-5">Produk tidak ditemukan 🔍</p>
+    </div>
 
     <!-- ======================================================
-         CARD CONTOH — iPhone 16 Duo
+         CARD CONTOH — iPhone Duo
          ====================================================== -->
     <div class="col">
-      <div class="card rounded-4 h-100 p-3 position-relative" id="card-contoh">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-contoh" data-category="gadget">
         <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-contoh</span>
 
-        <img src="https://placehold.co/400x160?text=iPhone+16+Duo" alt="iPhone 16 Duo" class="product-img mb-3 mt-3">
-        <div class="fw-semibold mb-1">iPhone 16 Duo</div>
+        <img src="./image/iphoneduo.jpg" alt="iPhone 16 Duo" class="product-img mb-3 mt-3">
+        <div class="fw-semibold mb-1">iPhone Duo</div>
         <div class="small text-secondary mb-2">HP second mulus, baterai masih 91%. Warna Natural Titanium, storage
           256GB.</div>
-        <div class="product-price mt-auto">Rp 12.500.000</div>
+        <div class="product-price mt-auto">Rp 35.500.000</div>
+
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         CARD TAMBAHAN — iPhone 17
+         ====================================================== -->
+    <div class="col">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-iphone-17" data-category="gadget">
+        <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-iphone-17</span>
+
+        <img src="./image/iphone17.png" alt="iPhone 17" class="product-img mb-3 mt-3">
+        <div class="fw-semibold mb-1">iPhone 17</div>
+        <div class="small text-secondary mb-2">Generasi terbaru dengan chip A19, kamera tercanggih, dan layar ProMotion
+          120Hz super mulus.</div>
+        <div class="product-price mt-auto">Rp 18.500.000</div>
+
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         CARD TAMBAHAN — iPhone 16
+         ====================================================== -->
+    <div class="col">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-iphone-16" data-category="gadget">
+        <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-iphone-16</span>
+
+        <img src="./image/iphone16.png" alt="iPhone 16" class="product-img mb-3 mt-3">
+        <div class="fw-semibold mb-1">iPhone 16</div>
+        <div class="small text-secondary mb-2">Dilengkapi Camera Control button, chip A18 powerful, dan baterai awet
+          seharian penuh.</div>
+        <div class="product-price mt-auto">Rp 15.000.000</div>
+
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         CARD TAMBAHAN — iPhone 15
+         ====================================================== -->
+    <div class="col">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-iphone-15" data-category="gadget">
+        <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-iphone-15</span>
+
+        <img src="./image/iphone15.png" alt="iPhone 15" class="product-img mb-3 mt-3">
+        <div class="fw-semibold mb-1">iPhone 15</div>
+        <div class="small text-secondary mb-2">Fitur Dynamic Island, kamera utama 48 MP super jernih, dan port universal
+          USB-C.</div>
+        <div class="product-price mt-auto">Rp 12.800.000</div>
+
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         CARD TAMBAHAN — iPhone 14
+         ====================================================== -->
+    <div class="col">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-iphone-14" data-category="gadget">
+        <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-iphone-14</span>
+
+        <img src="./image/iphone14.png" alt="iPhone 14" class="product-img mb-3 mt-3">
+        <div class="fw-semibold mb-1">iPhone 14</div>
+        <div class="small text-secondary mb-2">Layar Super Retina XDR memukau, chip A15 Bionic kencang, dan kamera ganda
+          andalan.</div>
+        <div class="product-price mt-auto">Rp 10.200.000</div>
+
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
       </div>
     </div>
 
     <!-- ======================================================
          CARD 1 — DIKERJAKAN OLEH FALIHA IMTINAN
          Branch: feature/card-faliha
-         Instruksi: Hapus konten "kosong" di bawah ini,
-                    lalu isi dengan produk pilihanmu.
          ====================================================== -->
     <div class="col">
-      <div class="card rounded-4 h-100 p-3 position-relative" id="card-1">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-1" data-category="lainnya">
         <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-faliha</span>
 
-        <!-- CONTOH KONTEN YANG BISA KAMU ISI: -->
-        <img src="/image/MilkCotton5Ply.jpg" alt="Milk Cotton Yarn 5 Ply" class="product-img mb-3 mt-3">
+        <img src="./image/MilkCotton5Ply.jpg" alt="Milk Cotton Yarn 5 Ply" class="product-img mb-3 mt-3">
         <div class="fw-semibold mb-1">Milk Cotton Yarn 5 Ply</div>
         <div class="small text-secondary mb-2">Benang Milk Cotton 5 Ply untuk Rajut<br>Bahan Kapas + Serat Susu</div>
         <div class="product-price mt-auto">Rp 6.153</div>
 
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
       </div>
     </div>
 
@@ -110,9 +311,8 @@
          Branch: feature/card-najwa
          ====================================================== -->
     <div class="col">
-      <div class="card rounded-4 h-100 p-3 position-relative" id="card-2">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-2" data-category="gadget">
         <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-najwa</span>
-
 
         <img src="./image/gambar nailong.webp"
           alt="Goojodoq kipas turbo GFS001 100 gear wind hight-speed kipas angin digital display"
@@ -121,8 +321,14 @@
         </div>
         <div class="small text-secondary mb-2">Kipas angin portable adalah perangkat pendingin mini bertenaga baterai
           yang mudah dibawa ke mana saja.</div>
-        <div class="product-price mt-auto">Rp294.000</div>
+        <div class="product-price mt-auto">Rp 294.000</div>
 
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
       </div>
     </div>
 
@@ -131,20 +337,21 @@
          Branch: feature/card-haifz
          ====================================================== -->
     <div class="col">
-      <div class="card rounded-4 h-100 p-3 position-relative" id="card-3">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-3" data-category="lainnya">
         <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-haifz</span>
 
-         <img src="bucketcadbury.jpg" alt="Nama Barang" class="product-img mb-3">
+        <img src="bucketcadbury.jpg" alt="Bucket Chocolate" class="product-img mb-3 mt-3">
         <div class="fw-semibold mb-1">Bucket Chocolate</div>
-        <div class="small text-secondary mb-2">Setiap batang coklat adalah kata yang tak sempat terucap. Untuk dia yang selalu ada di hati, walau jarak dan waktu memisahkan.</div>
+        <div class="small text-secondary mb-2">Setiap batang coklat adalah kata yang tak sempat terucap. Untuk dia yang
+          selalu ada di hati, walau jarak dan waktu memisahkan.</div>
         <div class="product-price mt-auto">Rp 199.000</div>
 
-        <!-- CONTOH KONTEN:
-        <img src="foto-barang.jpg" alt="Nama Barang" class="product-img mb-3">
-        <div class="fw-semibold mb-1">Nama Barang</div>
-        <div class="small text-secondary mb-2">Deskripsi singkat barang ini.</div>
-        <div class="product-price mt-auto">Rp 99.000</div>
-        -->
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
       </div>
     </div>
 
@@ -153,14 +360,23 @@
          Branch: feature/card-imam
          ====================================================== -->
     <div class="col">
-      <div class="card rounded-4 h-100 p-3 position-relative" id="card-4">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-4" data-category="lainnya">
         <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-imam</span>
 
-        <img src="image/GanJiang.jpeg" alt="Motor Nuclear MNP-XH12W GAN JIANG White Version" class="product-img mb-3 mt-3">
+        <img src="image/GanJiang.jpeg" alt="Motor Nuclear MNP-XH12W GAN JIANG White Version"
+          class="product-img mb-3 mt-3">
         <div class="fw-semibold mb-1">Motor Nuclear MNP-XH12W GAN JIANG White Version</div>
-        <div class="small text-secondary mb-2">Motor Nuclear MNP-XH12W GAN JIANG White Version adalah model mendetail yang ditujukan bagi para kolektor dari seri Originate. Model ini menampilkan desain mekanis yang rumit dengan tinggi 30,8 cm dan paduan warna khas putih, biru, dan emas.</div>
+        <div class="small text-secondary mb-2">Motor Nuclear MNP-XH12W GAN JIANG White Version adalah model mendetail
+          yang ditujukan bagi para kolektor dari seri Originate. Model ini menampilkan desain mekanis yang rumit dengan
+          tinggi 30,8 cm dan paduan warna khas putih, biru, dan emas.</div>
         <div class="product-price mt-auto">Rp 1.355.013</div>
-        
+
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
       </div>
     </div>
 
@@ -169,16 +385,21 @@
          Branch: feature/card-rizky
          ====================================================== -->
     <div class="col">
-      <div class="card rounded-4 h-100 p-3 position-relative" id="card-5">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-5" data-category="gadget">
         <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-rizky</span>
 
-        
-        
         <img src="image/download (1).webp" alt="Nvidia Geforce RTX 5090" class="product-img mb-3 mt-3">
         <div class="fw-semibold mb-1">Nvidia Geforce RTX 5090</div>
-        <div class="small text-secondary mb-2">kartu grafis (GPU) flagship generasi terbaru berarsitektur Blackwell yang dirancang khusus untuk gaming 4K/8K, komputasi AI, dan rendering profesional.</div>
+        <div class="small text-secondary mb-2">kartu grafis (GPU) flagship generasi terbaru berarsitektur Blackwell yang
+          dirancang khusus untuk gaming 4K/8K, komputasi AI, dan rendering profesional.</div>
         <div class="product-price mt-auto">Rp 78.814.000</div>
-        
+
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
+        </div>
       </div>
     </div>
 
@@ -187,38 +408,24 @@
          Branch: feature/card-fajar
          ====================================================== -->
     <div class="col">
-      <div class="card rounded-4 h-100 p-3 position-relative" id="card-6">
+      <div class="card rounded-4 h-100 p-3 position-relative" id="card-6" data-category="gadget">
         <span class="card-number text-secondary position-absolute top-0 start-0 m-2">card-fajar</span>
 
-        <!-- HAPUS BLOK INI DAN GANTI DENGAN KONTEN KAMU -->
-        <img
-          src="dji-osmo-pocket-3-creator-combo-a.jpg"
-          alt="DJI Osmo Pocket 3 Creator Combo"
-          class="product-img mb-3 mt-3"
-        >
-
-        <div class="fw-semibold mb-1">
-          DJI Osmo Pocket 3 Creator Combo
-        </div>
-
+        <img src="dji-osmo-pocket-3-creator-combo-a.jpg" alt="DJI Osmo Pocket 3 Creator Combo"
+          class="product-img mb-3 mt-3">
+        <div class="fw-semibold mb-1">DJI Osmo Pocket 3 Creator Combo</div>
         <div class="small text-secondary mb-2">
-          Pocket gimbal camera dengan sensor 1-inch CMOS, video hingga
-          4K/120fps, layar OLED 2-inch yang dapat diputar, dan
-          stabilisasi mekanis 3-axis. Creator Combo dilengkapi DJI Mic 2,
-          battery handle, mini tripod, dan carrying bag.
+          Pocket gimbal camera dengan sensor 1-inch CMOS, video hingga 4K/120fps, layar OLED 2-inch yang dapat diputar,
+          dan stabilisasi mekanis 3-axis.
         </div>
+        <div class="product-price mt-auto">Rp 7.359.000</div>
 
-        <div class="product-price mt-auto">
-          Rp 7.359.000
+        <!-- Tombol Aksi Card -->
+        <div class="d-flex gap-2 pt-2 mt-3 border-top">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-like flex-grow-1">🤍 Suka</button>
+          <button type="button" class="btn btn-sm btn-outline-warning btn-fav flex-grow-1">⭐ Fav</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary btn-delete" title="Hapus Card">🗑️</button>
         </div>
-        <!-- SAMPAI SINI -->
-
-        <!-- CONTOH KONTEN:
-        <img src="foto-barang.jpg" alt="Nama Barang" class="product-img mb-3">
-        <div class="fw-semibold mb-1">Nama Barang</div>
-        <div class="small text-secondary mb-2">Deskripsi singkat barang ini.</div>
-        <div class="product-price mt-auto">Rp 99.000</div>
-        -->
       </div>
     </div>
 
@@ -228,6 +435,8 @@
     Informatics Summit Bootcamp II · Git Collaboration Exercise · 2026
   </p>
 
+  <!-- Script JavaScript Eksternal -->
+  <script src="script.js"></script>
 </body>
 
 </html>
