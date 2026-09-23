@@ -143,7 +143,15 @@ document.addEventListener('DOMContentLoaded', function () {
     //      * Kalo terang (gak ada class 'dark-mode'), ubah teks tombol jadi '🌙 Dark'
 
     // GAS TULIS KODE DARK MODE DI SINI:
-
+    btnTheme.addEventListener('click', function(){
+        if(btnTheme.textContent === '🌙 Dark'){
+            btnTheme.textContent = '☀️ Light';
+            document.body.classList.toggle('dark-mode');
+        }else{
+            btnTheme.textContent = '🌙 Dark';
+            document.body.classList.toggle('dark-mode');
+        }
+    })
 
 
 
