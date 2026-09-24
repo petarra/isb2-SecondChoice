@@ -11,13 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const productContainer = document.getElementById('product-container');
 
     // Bantuan variabel elemen pop-up modal (bisa kamu uncomment kalau mau pakai):
-    // const popupModal = document.getElementById('popup-modal');
-    // const btnClosePopup = document.getElementById('btn-close-popup');
-    // const popupImg = document.getElementById('popup-img');
-    // const popupTitle = document.getElementById('popup-title');
-    // const popupDesc = document.getElementById('popup-desc');
-    // const popupPrice = document.getElementById('popup-price');
-    // const popupBadge = document.getElementById('popup-badge');
+    const popupModal = document.getElementById('popup-modal');
+    const btnClosePopup = document.getElementById('btn-close-popup');
+    const popupImg = document.getElementById('popup-img');
+    const popupTitle = document.getElementById('popup-title');
+    const popupDesc = document.getElementById('popup-desc');
+    const popupPrice = document.getElementById('popup-price');
+    const popupBadge = document.getElementById('popup-badge');
 
     productContainer.addEventListener('click', function (event) {
         const target = event.target; // Ini elemen yang beneran lagi diklik user
@@ -33,17 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //    - Kalo user klik OK, tendang card-nya dari layar pake .remove()
 
         // GAS TULIS KODE FITUR 1 DI SINI CUY:
-        const delBtn = target.closest('.btn-delete');
 
-        if (delBtn) {
-            const delCol = delBtn.closest('.col');
-            const delConfirm = confirm("Apakah Anda yakin akan menghapus kolom ini?");
-            if (delConfirm) {
-                delCol.remove();
-                alert("Berhasil dihapus!");
-            }
-            return;
-        }
 
         // --------------------------------------------------------
         // FITUR 2A: TOMBOL LIKE
@@ -57,20 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //      * Kalo gak aktif, balikin teksnya jadi '🤍 Suka'
 
         // GAS TULIS KODE FITUR 2A DI SINI:
-        const tombolLike = target.closest('.btn-like');
 
-        if (tombolLike) {
-            tombolLike.classList.toggle('btn-danger');
-            tombolLike.classList.toggle('active');
-
-            if (tombolLike.classList.contains('active')) {
-                tombolLike.innerHTML = '❤️ Suka';
-            } else {
-                tombolLike.innerHTML = '🤍 Suka';
-            }
-
-            return;
-        }
 
 
 
@@ -87,23 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
         //      * Kalo gak aktif, balikin jadi '⭐ Fav'
 
         // GAS TULIS KODE FITUR 2B DI SINI:
-        const tombolFav = target.closest('.btn-fav');
 
-        if (tombolFav) {
-            const kartu = tombolFav.closest('.card');
 
-            kartu.classList.toggle('is-favorite');
-            tombolFav.classList.toggle('btn-warning');
-            tombolFav.classList.toggle('active');
 
-            if (tombolFav.classList.contains('active')) {
-                tombolFav.innerHTML = '⭐ Favorit';
-            } else {
-                tombolFav.innerHTML = '⭐ Fav';
-            }
-
-            return;
-        }
 
         // --------------------------------------------------------
         // FITUR 2C: POP-UP DETAIL PRODUK (KLIK KARTU)
@@ -126,9 +89,62 @@ document.addEventListener('DOMContentLoaded', function () {
         // GAS TULIS KODE FITUR POP-UP DI SINI:
 
 
+const card = target.closest('.card');
+
+if (card) {
+
+    if (
+        target.closest('.btn-like') ||
+        target.closest('.btn-fav') ||
+        target.closest('.btn-delete')
+    ) {
+        return;
+    }
+
+    const img = card.querySelector('.product-img');
+    const title = card.querySelector('.fw-semibold');
+    const desc = card.querySelector('.small.text-secondary');
+    const price = card.querySelector('.product-price');
+    const category = card.getAttribute('data-category');
+
+    popupImg.src = img.src;
+    popupImg.alt = img.alt;
+
+    popupTitle.textContent = title.textContent;
+    popupDesc.textContent = desc.textContent;
+    popupPrice.textContent = price.textContent;
+
+    if (category === 'gadget') {
+        popupBadge.textContent = 'Gadget & Elektronik';
+    } else if (category === 'lainnya') {
+        popupBadge.textContent = 'Lainnya';
+    } else {
+        popupBadge.textContent = 'Detail Produk';
+    }
+
+    popupModal.classList.remove('d-none');
+}
 
     });
+// ============================================================
+// TUTUP POP-UP MODAL
+// ============================================================
 
+btnClosePopup.addEventListener('click', function () {
+    popupModal.classList.add('d-none');
+});
+
+popupModal.addEventListener('click', function (event) {
+    if (event.target === popupModal) {
+        popupModal.classList.add('d-none');
+    }
+});
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        popupModal.classList.add('d-none');
+    }
+});
 
     // ============================================================
     // BAGIAN 2: SEARCH & FILTER SIMPEL
@@ -136,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('search-input');   // Input ketikan search
     const filterSelect = document.getElementById('filter-select'); // Dropdown kategori
 
-    function filterProduct() {
+    function filterProduk() {
         // Clue pengerjaan:
         // 1. Ambil teks yang diketik di searchInput, kecilin semua hurufnya pake .toLowerCase()
         // 2. Ambil opsi kategori yang lagi dipilih di dropdown filterSelect (.value)
@@ -151,27 +167,9 @@ document.addEventListener('DOMContentLoaded', function () {
         //    - Kalo gak cocok, umpetin card-nya (style.display = 'none')
 
         // GAS TULIS KODE FUNGSI filterProduk DI SINI:
-      
-        const keyword = searchInput.value.toLowerCase();
-        const kategori = filterSelect.value;
-
-        document.querySelectorAll('.col > .card').forEach(function (card) {
-            const col = card.closest('.col');
-            const nama = card.querySelector('.fw-semibold').textContent.toLowerCase();
-            const cardKategori = card.dataset.category;
-
-            const cocokNama = nama.includes(keyword);
-            const cocokKategori = kategori === 'all' || cardKategori === kategori;
-
-            col.style.display = (cocokNama && cocokKategori) ? '' : 'none';
-        });
-        }
-
-        searchInput.addEventListener('input', filterProduct);
-        filterSelect.addEventListener('change', filterProduct);
 
 
-            
+    }
 
     // Pasang event listener buat search & dropdown filter:
     // - searchInput dengerin event 'input' (tiap ngetik langsung ngefilter)
@@ -198,11 +196,11 @@ document.addEventListener('DOMContentLoaded', function () {
     //      * Kalo terang (gak ada class 'dark-mode'), ubah teks tombol jadi '🌙 Dark'
 
     // GAS TULIS KODE DARK MODE DI SINI:
-    btnTheme.addEventListener('click', function () {
-        if (btnTheme.textContent === '🌙 Dark') {
+    btnTheme.addEventListener('click', function(){
+        if(btnTheme.textContent === '🌙 Dark'){
             btnTheme.textContent = '☀️ Light';
             document.body.classList.toggle('dark-mode');
-        } else {
+        }else{
             btnTheme.textContent = '🌙 Dark';
             document.body.classList.toggle('dark-mode');
         }
@@ -223,10 +221,6 @@ document.addEventListener('DOMContentLoaded', function () {
     //    - Langsung tembak warnanya ke document.body.style.backgroundColor
 
     // GAS TULIS KODE GANTI WARNA DI SINI:
-    bgColorPicker.addEventListener('input', function () {
-    const warnaDipilih = bgColorPicker.value;
-    document.body.style.backgroundColor = warnaDipilih;
-});
 
 
 
