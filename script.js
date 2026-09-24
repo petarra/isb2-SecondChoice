@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('search-input');   // Input ketikan search
     const filterSelect = document.getElementById('filter-select'); // Dropdown kategori
 
-    function filterProduk() {
+    function filterProduct() {
         // Clue pengerjaan:
         // 1. Ambil teks yang diketik di searchInput, kecilin semua hurufnya pake .toLowerCase()
         // 2. Ambil opsi kategori yang lagi dipilih di dropdown filterSelect (.value)
@@ -151,9 +151,27 @@ document.addEventListener('DOMContentLoaded', function () {
         //    - Kalo gak cocok, umpetin card-nya (style.display = 'none')
 
         // GAS TULIS KODE FUNGSI filterProduk DI SINI:
+      
+        const keyword = searchInput.value.toLowerCase();
+        const kategori = filterSelect.value;
+
+        document.querySelectorAll('.col > .card').forEach(function (card) {
+            const col = card.closest('.col');
+            const nama = card.querySelector('.fw-semibold').textContent.toLowerCase();
+            const cardKategori = card.dataset.category;
+
+            const cocokNama = nama.includes(keyword);
+            const cocokKategori = kategori === 'all' || cardKategori === kategori;
+
+            col.style.display = (cocokNama && cocokKategori) ? '' : 'none';
+        });
+        }
+
+        searchInput.addEventListener('input', filterProduct);
+        filterSelect.addEventListener('change', filterProduct);
 
 
-    }
+            
 
     // Pasang event listener buat search & dropdown filter:
     // - searchInput dengerin event 'input' (tiap ngetik langsung ngefilter)
