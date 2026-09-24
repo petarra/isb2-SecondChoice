@@ -205,6 +205,10 @@ document.addEventListener('DOMContentLoaded', function () {
     //    - Langsung tembak warnanya ke document.body.style.backgroundColor
 
     // GAS TULIS KODE GANTI WARNA DI SINI:
+    bgColorPicker.addEventListener('input', function () {
+    const warnaDipilih = bgColorPicker.value;
+    document.body.style.backgroundColor = warnaDipilih;
+});
 
 
 
