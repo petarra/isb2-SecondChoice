@@ -47,7 +47,20 @@ document.addEventListener('DOMContentLoaded', function () {
         //      * Kalo gak aktif, balikin teksnya jadi '🤍 Suka'
 
         // GAS TULIS KODE FITUR 2A DI SINI:
+        const tombolLike = target.closest('.btn-like');
 
+        if (tombolLike) {
+            tombolLike.classList.toggle('btn-danger');
+            tombolLike.classList.toggle('active');
+
+            if (tombolLike.classList.contains('active')) {
+                tombolLike.innerHTML = '❤️ Suka';
+            } else {
+                tombolLike.innerHTML = '🤍 Suka';
+            }
+
+            return;
+        }
 
 
 
@@ -64,9 +77,23 @@ document.addEventListener('DOMContentLoaded', function () {
         //      * Kalo gak aktif, balikin jadi '⭐ Fav'
 
         // GAS TULIS KODE FITUR 2B DI SINI:
+        const tombolFav = target.closest('.btn-fav');
 
+        if (tombolFav) {
+            const kartu = tombolFav.closest('.card');
 
+            kartu.classList.toggle('is-favorite');
+            tombolFav.classList.toggle('btn-warning');
+            tombolFav.classList.toggle('active');
 
+            if (tombolFav.classList.contains('active')) {
+                tombolFav.innerHTML = '⭐ Favorit';
+            } else {
+                tombolFav.innerHTML = '⭐ Fav';
+            }
+
+            return;
+        }
 
         // --------------------------------------------------------
         // FITUR 2C: POP-UP DETAIL PRODUK (KLIK KARTU)
@@ -143,11 +170,11 @@ document.addEventListener('DOMContentLoaded', function () {
     //      * Kalo terang (gak ada class 'dark-mode'), ubah teks tombol jadi '🌙 Dark'
 
     // GAS TULIS KODE DARK MODE DI SINI:
-    btnTheme.addEventListener('click', function(){
-        if(btnTheme.textContent === '🌙 Dark'){
+    btnTheme.addEventListener('click', function () {
+        if (btnTheme.textContent === '🌙 Dark') {
             btnTheme.textContent = '☀️ Light';
             document.body.classList.toggle('dark-mode');
-        }else{
+        } else {
             btnTheme.textContent = '🌙 Dark';
             document.body.classList.toggle('dark-mode');
         }
