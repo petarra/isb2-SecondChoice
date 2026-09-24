@@ -23,7 +23,17 @@ document.addEventListener('DOMContentLoaded', function () {
         //    - Kalo user klik OK, tendang card-nya dari layar pake .remove()
 
         // GAS TULIS KODE FITUR 1 DI SINI CUY:
+        const delBtn = target.closest('.btn-delete');
 
+        if (delBtn) {
+            const delCol = delBtn.closest('.col');
+            const delConfirm = confirm("Apakah Anda yakin akan menghapus kolom ini?");
+            if (delConfirm) {
+                delCol.remove();
+                alert("Berhasil dihapus!");
+            }
+            return;
+        }
 
         // --------------------------------------------------------
         // FITUR 2A: TOMBOL LIKE
